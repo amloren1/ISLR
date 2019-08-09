@@ -4,6 +4,7 @@ import os
 
 
 import pandas as pd
+import seaborn as sns; sns.set(style="ticks", color_codes=True)
 
 class Data(object):
 
@@ -35,6 +36,13 @@ class Data(object):
 
         return X, y
 
+    @staticmethod
+    def pair_plot(df, fn = "adv_pplot.png"):
+
+        plt = sns.pairplot(df)
+        plt.savefig(fn)
+        #breakpoint()
+
     def clean(self, df):
 
         X,y = self.xy_split(df)
@@ -45,3 +53,4 @@ if __name__ == "__main__":
 
     data_1 = Data()
     X, y = data_1.xy_split(data_1.raw_data)
+    data_1.pair_plot(data_1.raw_data)
