@@ -27,14 +27,18 @@ class Data(object):
 
         return data
 
-    def xy_split(self, df):
-        breakpoint()
+    @staticmethod
+    def xy_split(df):
         X = df.loc[:, df.columns!="Sales"]
 
         y = df.loc[:, df.columns=="Sales"]
 
-
         return X, y
+
+    def clean(self, df):
+
+        X,y = self.xy_split(df)
+
 
 
 if __name__ == "__main__":
