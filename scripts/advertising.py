@@ -41,7 +41,6 @@ class Data(object):
 
         plt = sns.pairplot(df)
         plt.savefig(fn)
-        #breakpoint()
 
     def clean(self, df):
 
