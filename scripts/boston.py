@@ -11,6 +11,7 @@ else:
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy
 import seaborn as sns; sns.set(style="ticks", color_codes=True)
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
@@ -42,28 +43,33 @@ class Model(object):
 
         return regression, y_hat
 
-    def summary(self, y_hat, y_test):
+    def summary(self, model, X, y_pred):
+        y_test = self.med_val.values
+        r2 = r2_score(y_test,y_pred)
+        mse =  mean_squared_error(y_test, y_pred)
 
-        r2 = r2_score(y_test,y_hat)
-        mse =  mean_squared_error(y_test, y_hat)
+        b1_std_err = self.get_slopes_se(X, y_pred)
 
+        t_statistic = model.intercept_[0]/b1_std_err
+        breakpoint()
+        p_val = scipy.stats.norm.sf(abs(t_statistic)) #one-sided
 
     def get_rss(self, y_pred):
         rss = 0
-        y_fit = self.med_val.values
-        for i in range(len(y_fit)):
-            rss+= (y_fit[i][0]-y_pred[i][0])**2
+        y_test = self.med_val.values
+        for i in range(len(y_test)):
+            rss+= (y_test[i][0]-y_pred[i][0])**2
 
-        return (rss/(len(y_fit)-2))**0.5
+        return (rss/(len(y_test)-2))**0.5
 
     def get_slopes_se(self, X, y_pred):
         rss = self.get_rss(y_pred)
         x_mean = np.mean(X)
         x_var = list(map(lambda x: (x-x_mean)**2, X))
         x_var = sum(x_var)
-        breakpoint()
 
-        return rss**2/x_var
+        return (rss**2/x_var)**0.5
+
     @staticmethod
     def plot_1p(X, y_test, y_pred):
         fig, ax = plt.subplots()
@@ -75,8 +81,9 @@ class Model(object):
 
 if __name__ == "__main__":
     model = Model()
-    regression, y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
-    se_b1 = model.get_slopes_se(model.raw_features["lstat"].values, y_hat)
+    regression, y_pred = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
     breakpoint()
-    model.plot_1p(model.raw_features["lstat"], model.med_val, y_hat)
+
+    model.summary(regression, model.raw_features["lstat"].values, y_pred)
+    model.plot_1p(model.raw_features["lstat"], model.med_val, y_pred)
     pass
