@@ -33,15 +33,15 @@ class Model(object):
         if y:
             sns.pairplot(self.raw_features, hue="cylinders")
 
-    def linear_regresison(self, X=None, y=None):
+    def simple_linear_regresison(self, X=None, y=None):
 
-        regression = LinearRegression().fit(
-            X.values.reshape(-1, 1), y.values.reshape(-1, 1)
-        )
-        regression.fit(X.values.reshape(-1, 1), y.values.reshape(-1, 1))
-        y_hat = regression.predict(X.values.reshape(-1, 1))
+        regression = LinearRegression()
+        regression.fit(X, y.values.reshape(-1, 1))
+        y_hat = regression.predict(X)
 
         return regression, y_hat
+
+
 
     def summary(self, model, X, y_pred):
         y_test = self.med_val.values
@@ -86,10 +86,17 @@ class Model(object):
 
 if __name__ == "__main__":
     model = Model()
-    regression, y_pred = model.linear_regresison(
-        X=model.raw_features["lstat"], y=model.med_val
-    )
 
+
+    X = pd.concat([model.raw_features["lstat"],
+            model.raw_features["age"],
+            model.raw_features["lstat"]*model.raw_features["age"]],
+            axis=1,
+            keys = ["lstat", "age", "lstat x age"])
+    regression, y_pred = model.simple_linear_regresison(
+        X=X.values, y=model.med_val
+    )
+    breakpoint()
     model.summary(regression, model.raw_features["lstat"].values, y_pred)
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_pred)
     pass
