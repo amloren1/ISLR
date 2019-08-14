@@ -50,9 +50,12 @@ class Model(object):
 
         b1_std_err = self.get_slopes_se(X, y_pred)
 
-        t_statistic = model.intercept_[0]/b1_std_err
-        breakpoint()
+        t_statistic =  model.coef_[0][0]/b1_std_err
+
         p_val = scipy.stats.norm.sf(abs(t_statistic)) #one-sided
+
+        print("coef     value    SE      t-stat     p-value     ")
+        print(f"beta_1  {model.coef_[0][0]:.3f}    {b1_std_err:.3f}    {t_statistic:.3f}    {p_val:.3e}")
 
     def get_rss(self, y_pred):
         rss = 0
@@ -82,7 +85,6 @@ class Model(object):
 if __name__ == "__main__":
     model = Model()
     regression, y_pred = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
-    breakpoint()
 
     model.summary(regression, model.raw_features["lstat"].values, y_pred)
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_pred)
