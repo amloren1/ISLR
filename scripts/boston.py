@@ -46,6 +46,14 @@ class Model(object):
         r2 = r2_score(y_test,y_hat)
         mse =  mean_squared_error(y_test, y_hat)
 
+    @staticmethod
+    def get_rss(y_fit, y_pred):
+        rss = 0
+        breakpoint()
+        for i in range(len(y_fit)):
+            rss+= (y_fit[i][0]-y_pred[i][0])**2
+
+        return (rss/(len(y_fit)-2))**0.5
 
     @staticmethod
     def plot_1p(X, y_test, y_pred):
@@ -59,6 +67,7 @@ class Model(object):
 if __name__ == "__main__":
     model = Model()
     regression, y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
+    rss = model.get_rss(model.med_val.values, y_hat)
     breakpoint()
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_hat)
     pass
