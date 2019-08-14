@@ -9,6 +9,7 @@ else:
 
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns; sns.set(style="ticks", color_codes=True)
 from sklearn.linear_model import LinearRegression
@@ -46,15 +47,23 @@ class Model(object):
         r2 = r2_score(y_test,y_hat)
         mse =  mean_squared_error(y_test, y_hat)
 
-    @staticmethod
-    def get_rss(y_fit, y_pred):
+
+    def get_rss(self, y_pred):
         rss = 0
-        breakpoint()
+        y_fit = self.med_val.values
         for i in range(len(y_fit)):
             rss+= (y_fit[i][0]-y_pred[i][0])**2
 
         return (rss/(len(y_fit)-2))**0.5
 
+    def get_slopes_se(self, X, y_pred):
+        rss = self.get_rss(y_pred)
+        x_mean = np.mean(X)
+        x_var = list(map(lambda x: (x-x_mean)**2, X))
+        x_var = sum(x_var)
+        breakpoint()
+
+        return rss**2/x_var
     @staticmethod
     def plot_1p(X, y_test, y_pred):
         fig, ax = plt.subplots()
@@ -67,7 +76,7 @@ class Model(object):
 if __name__ == "__main__":
     model = Model()
     regression, y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
-    rss = model.get_rss(model.med_val.values, y_hat)
+    se_b1 = model.get_slopes_se(model.raw_features["lstat"].values, y_hat)
     breakpoint()
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_hat)
     pass
