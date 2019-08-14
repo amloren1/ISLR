@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns; sns.set(style="ticks", color_codes=True)
 from sklearn.linear_model import LinearRegression
-
+plt.style.use('ggplot')
 
 
 class Model(object):
@@ -30,10 +30,23 @@ class Model(object):
         if y:
             sns.pairplot(self.raw_features, hue="cylinders")
 
-    def linear_regresison(X=self.raw_features, y=self.med_val):
-        LinearRegression().fit(X, y)
+    def linear_regresison(self, X=None, y=None):
 
+        y_hat = LinearRegression().fit(X, y)
+
+        return y_hat
+
+    @staticmethod
+    def plot_1p(X, y):
+        fig, ax = plt.subplots()
+        ax.plot(X, y)
+        ax.set(xlabel= "X1", ylabel= "Median value",
+        title="")
+        plt.show()
 
 if __name__ == "__main__":
     model = Model()
+
+    y_hat = model.linear_regresison(X = model.raw_features[""], y = model.med_val)
+    breakpoint()
     pass
