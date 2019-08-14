@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns; sns.set(style="ticks", color_codes=True)
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
 plt.style.use('ggplot')
 
 
@@ -31,22 +33,32 @@ class Model(object):
 
     def linear_regresison(self, X=None, y=None):
 
-        model = LinearRegression().fit(X.values.reshape(-1,1), y.values.reshape(-1,1))
-        y_hat = model.fit(
-            X.values.reshape(-1,1),
-            y.values.reshape(-1,1)).predict(X.values.reshape(-1,1))
-        return y_hat
+        regression = LinearRegression().fit(X.values.reshape(-1,1), y.values.reshape(-1,1))
+        regression.fit(X.values.reshape(-1,1),
+                    y.values.reshape(-1,1))
+        y_hat = regression.predict(X.values.reshape(-1,1))
+
+
+        return regression, y_hat
+
+    def summary(self, y_hat, y_test):
+
+        r2 = r2_score(y_test,y_hat)
+        mse =  mean_squared_error(y_test, y_hat)
+
 
     @staticmethod
-    def plot_1p(X, y):
+    def plot_1p(X, y_test, y_pred):
         fig, ax = plt.subplots()
-        ax.plot(X, y)
+        ax.scatter(X, y_test, color = "b")
+        ax.plot(X, y_pred, color = "r")
         ax.set(xlabel= "X1", ylabel= "Median value",
         title="")
         plt.show()
 
 if __name__ == "__main__":
     model = Model()
-    y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
+    regression, y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
     breakpoint()
+    model.plot_1p(model.raw_features["lstat"], model.med_val, y_hat)
     pass
