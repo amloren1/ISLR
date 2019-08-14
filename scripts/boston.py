@@ -20,7 +20,6 @@ class Model(object):
     def __init__(self):
 
         self.raw_data = pd.read_csv(fp+"Boston.csv")
-        breakpoint()
         self.raw_features = self.raw_data.loc[:, self.raw_data.columns != "medv"]
         self.med_val = self.raw_data.loc[:, self.raw_data.columns == "medv"]
 
@@ -32,8 +31,10 @@ class Model(object):
 
     def linear_regresison(self, X=None, y=None):
 
-        y_hat = LinearRegression().fit(X, y)
-
+        model = LinearRegression().fit(X.values.reshape(-1,1), y.values.reshape(-1,1))
+        y_hat = model.fit(
+            X.values.reshape(-1,1),
+            y.values.reshape(-1,1)).predict(X.values.reshape(-1,1))
         return y_hat
 
     @staticmethod
@@ -46,7 +47,6 @@ class Model(object):
 
 if __name__ == "__main__":
     model = Model()
-
-    y_hat = model.linear_regresison(X = model.raw_features[""], y = model.med_val)
+    y_hat = model.linear_regresison(X = model.raw_features["lstat"], y = model.med_val)
     breakpoint()
     pass
