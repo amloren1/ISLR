@@ -41,13 +41,33 @@ class Model(object):
 
         return regression, y_hat
 
+    def non_linear_transformations(self):
+        """
+         Lab: 3.6.5
+        """
 
+        lstat = self.raw_features.loc[:, self.raw_features.columns == "lstat"]
+
+    @staticmethod
+    def coef_summary(X, y_pred, coef)
+        b1_std_err = self.get_slopes_se(X, y_pred)
+
+        t_statistic = coef / b1_std_err
+
+        p_val = scipy.stats.norm.sf(abs(t_statistic))  # one-sided
+
+        return b1_std_err, t_statistic, p_val
 
     def summary(self, model, X, y_pred):
+        """
+            summary showing results of coefficients
+        """
         y_test = self.med_val.values
         r2 = r2_score(y_test, y_pred)
         mse = mean_squared_error(y_test, y_pred)
 
+        for x in X:
+            breakpoint()
         b1_std_err = self.get_slopes_se(X, y_pred)
 
         t_statistic = model.coef_[0][0] / b1_std_err
@@ -84,10 +104,24 @@ class Model(object):
         plt.show()
 
 
+
+
 if __name__ == "__main__":
     model = Model()
 
 
+
+    # Lab 3.6.5
+    X = pd.concat([model.raw_features["lstat"],
+                model.raw_features["lstat"]**2],
+                axis = 1,
+                keys = ["lstat", "lstat^2"])
+
+    regression, y_pred = model.simple_linear_regresison(
+        X=X.values, y=model.med_val
+    )
+    breakpoint()
+    # Lab 3.6.4 interaction terms
     X = pd.concat([model.raw_features["lstat"],
             model.raw_features["age"],
             model.raw_features["lstat"]*model.raw_features["age"]],
