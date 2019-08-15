@@ -96,7 +96,6 @@ if __name__ == "__main__":
     regression, y_pred = model.simple_linear_regresison(
         X=X.values, y=model.med_val
     )
-    breakpoint()
     model.summary(regression, model.raw_features["lstat"].values, y_pred)
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_pred)
     pass
