@@ -48,8 +48,7 @@ class Model(object):
 
         lstat = self.raw_features.loc[:, self.raw_features.columns == "lstat"]
 
-    @staticmethod
-    def coef_summary(X, y_pred, coef)
+    def coef_summary(self, X, y_pred, coef):
         b1_std_err = self.get_slopes_se(X, y_pred)
 
         t_statistic = coef / b1_std_err
@@ -66,7 +65,15 @@ class Model(object):
         r2 = r2_score(y_test, y_pred)
         mse = mean_squared_error(y_test, y_pred)
 
-        for x in X:
+        summary_list = []
+        i = 0
+        for x in X.columns:
+            breakpoint()
+            coef = model.coef_[0][0]
+            beta, t_stat, p = self.coef_summary(X[x], y_pred,
+
+            summary_list.append((beta, t_stat, p))
+            i+=1
             breakpoint()
         b1_std_err = self.get_slopes_se(X, y_pred)
 
@@ -110,7 +117,6 @@ if __name__ == "__main__":
     model = Model()
 
 
-
     # Lab 3.6.5
     X = pd.concat([model.raw_features["lstat"],
                 model.raw_features["lstat"]**2],
@@ -120,6 +126,7 @@ if __name__ == "__main__":
     regression, y_pred = model.simple_linear_regresison(
         X=X.values, y=model.med_val
     )
+    model.summary(regression, X, y_pred)
     breakpoint()
     # Lab 3.6.4 interaction terms
     X = pd.concat([model.raw_features["lstat"],
