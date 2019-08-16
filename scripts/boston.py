@@ -70,11 +70,11 @@ class Model(object):
         for x in X.columns:
             breakpoint()
             coef = model.coef_[0][0]
-            beta, t_stat, p = self.coef_summary(X[x], y_pred,
+            beta, t_stat, p = self.coef_summary(X[x], y_pred)
 
             summary_list.append((beta, t_stat, p))
-            i+=1
-            breakpoint()
+            # i +=1
+            # breakpoint()
         b1_std_err = self.get_slopes_se(X, y_pred)
 
         t_statistic = model.coef_[0][0] / b1_std_err
@@ -111,32 +111,30 @@ class Model(object):
         plt.show()
 
 
-
-
 if __name__ == "__main__":
     model = Model()
 
-
     # Lab 3.6.5
-    X = pd.concat([model.raw_features["lstat"],
-                model.raw_features["lstat"]**2],
-                axis = 1,
-                keys = ["lstat", "lstat^2"])
-
-    regression, y_pred = model.simple_linear_regresison(
-        X=X.values, y=model.med_val
+    X = pd.concat(
+        [model.raw_features["lstat"], model.raw_features["lstat"] ** 2],
+        axis=1,
+        keys=["lstat", "lstat^2"],
     )
+
+    regression, y_pred = model.simple_linear_regresison(X=X.values, y=model.med_val)
     model.summary(regression, X, y_pred)
     breakpoint()
     # Lab 3.6.4 interaction terms
-    X = pd.concat([model.raw_features["lstat"],
+    X = pd.concat(
+        [
+            model.raw_features["lstat"],
             model.raw_features["age"],
-            model.raw_features["lstat"]*model.raw_features["age"]],
-            axis=1,
-            keys = ["lstat", "age", "lstat x age"])
-    regression, y_pred = model.simple_linear_regresison(
-        X=X.values, y=model.med_val
+            model.raw_features["lstat"] * model.raw_features["age"],
+        ],
+        axis=1,
+        keys=["lstat", "age", "lstat x age"],
     )
+    regression, y_pred = model.simple_linear_regresison(X=X.values, y=model.med_val)
     model.summary(regression, model.raw_features["lstat"].values, y_pred)
     model.plot_1p(model.raw_features["lstat"], model.med_val, y_pred)
     pass
