@@ -54,7 +54,8 @@ class Model(object):
         t_statistic = coef / b1_std_err
 
         p_val = scipy.stats.norm.sf(abs(t_statistic))  # one-sided
-
+        print(p_val)
+        breakpoint()
         return b1_std_err, t_statistic, p_val
 
     def summary(self, model, X, y_pred):
@@ -67,25 +68,20 @@ class Model(object):
 
         summary_list = []
         i = 0
-        for x in X.columns:
-            breakpoint()
-            coef = model.coef_[0][0]
-            beta, t_stat, p = self.coef_summary(X[x], y_pred)
-
-            summary_list.append((beta, t_stat, p))
-            # i +=1
-            # breakpoint()
-        b1_std_err = self.get_slopes_se(X, y_pred)
-
-        t_statistic = model.coef_[0][0] / b1_std_err
-
-        p_val = scipy.stats.norm.sf(abs(t_statistic))  # one-sided
-
         print("coef     value    SE      t-stat     p-value     ")
-        print(
-            f"beta_1  {model.coef_[0][0]:.3f}    {b1_std_err:.3f}    {t_statistic:.3f}    {p_val:.3e}"
-        )
+        for x in X.columns:
+            #breakpoint()
+            coef = model.coef_[0][i]
+            b1_std_err, t_statistic, p_val = self.coef_summary(X[x], y_pred, coef)
 
+            summary_list.append((b1_std_err, t_statistic, p_val))
+            i +=1
+            # breakpoint()
+
+            print(
+                f"beta_1  {coef:.3f}    {b1_std_err:.3f}    {t_statistic:.3f}    {p_val:.5e}"
+            )
+        breakpoint()
     def get_rss(self, y_pred):
         rss = 0
         y_test = self.med_val.values
