@@ -12,7 +12,7 @@ import pandas as pd
 import seaborn as sns
 sns.set(style="ticks", color_codes=True)
 import scipy
-#from sklearn.linear_model import LogisticRegression
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 
@@ -78,10 +78,11 @@ def sec_4_6_2(data):
     """
     # breakpoint()
 
-    x_train, x_test, y_train, y_test = train_test_split(
-        data.raw_features["Volume", "Lag1"], data.raw_y, test_size=0.01, random_state=0
-    )
-    logit = sm.Logit(data.raw_y,data.raw_features)
+    # x_train, x_test, y_train, y_test = train_test_split(
+    #     data.raw_features, data.raw_y, test_size=0.01, random_state=0
+    # )
+
+    logit = sm.Logit(data.raw_y,data.raw_features.loc[:,["Lag1", "Lag2"]])
     # fit the model
     result = logit.fit()
     print(result.summary())
@@ -92,8 +93,20 @@ def sec_4_6_2(data):
     print(f"down true {conf_matrix[0,0]}       {conf_matrix[0,1]}  ")
     print(f"up true   {conf_matrix[1,0]}        {conf_matrix[1,1]}")
 
+    print(f"accuracy = {(conf_matrix[0,0]+conf_matrix[1,1])/1250}")
+
+
+def sec_4_6_3(data):
+    """
+        using LDA to predict stock prices
+    """
+    # breakpoint()
+
+
+
 if __name__ == "__main__":
     data = Data()
 
     #sec_4_6_1(data)
     sec_4_6_2(data)
+    sec_4_6_3(data)
