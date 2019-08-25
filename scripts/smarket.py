@@ -100,7 +100,10 @@ def sec_4_6_3(data):
     """
         using LDA to predict stock prices
     """
-    # breakpoint()
+    lda = LinearDiscriminantAnalysis(solver="svd")
+
+    lda.fit(data.raw_features, data.raw_y.values.ravel())
+    breakpoint()
 
 
 
@@ -108,5 +111,5 @@ if __name__ == "__main__":
     data = Data()
 
     #sec_4_6_1(data)
-    sec_4_6_2(data)
+    # sec_4_6_2(data)
     sec_4_6_3(data)
